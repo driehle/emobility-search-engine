@@ -1,0 +1,31 @@
+# General files
+php-cs-fixer.phar
+*.tmp
+*.bak
+*.swp
+
+# JetBrains files
+.idea/
+.idea_modules/
+*.ips
+*.iws
+*.iml
+
+# Eclipse files
+.settings/
+.project
+.buildpath
+.loadpath
+.metadata
+.gradle
+*.launch
+
+# Sublime files
+*.sublime-workspace
+*.sublime-project
+sftp-config.json
+
+# Windows files
+Desktop.ini
+Thumbs.db
+ehthumbs.db
