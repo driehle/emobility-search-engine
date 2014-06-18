@@ -30,33 +30,13 @@ return array(
                     ),
                 ),
             ),
-            // The following is a route to simplify getting started creating
-            // new controllers and actions without needing to create a new
-            // module. Simply drop new controllers in, and you can access them
-            // using the path /application/:controller/:action
-            'application' => array(
-                'type'    => 'Literal',
+            'projects' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
-                    'route'    => '/application',
+                    'route'    => '/projects',
                     'defaults' => array(
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'Index',
-                        'action'        => 'index',
-                    ),
-                ),
-                'may_terminate' => true,
-                'child_routes' => array(
-                    'default' => array(
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route'    => '/[:controller[/:action]]',
-                            'constraints' => array(
-                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-                            ),
-                            'defaults' => array(
-                            ),
-                        ),
+                        'controller' => 'Application\Controller\Project',
+                        'action'     => 'index',
                     ),
                 ),
             ),
@@ -84,7 +64,8 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'Application\Controller\Index' => 'Application\Controller\IndexController',
-            'Application\Controller\Search' => 'Application\Controller\SearchController'
+            'Application\Controller\Search' => 'Application\Controller\SearchController',
+            'Application\Controller\Project' => 'Application\Controller\ProjectController'
         ),
     ),
     'view_manager' => array(
@@ -101,6 +82,11 @@ return array(
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',
+        ),
+    ),
+    'view_helpers' => array(
+        'invokables' => array(
+            'currentRouteMatch' => 'Application\View\Helper\CurrentRouteMatch'
         ),
     ),
     // Placeholder for console routes

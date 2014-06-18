@@ -1,19 +1,43 @@
 <div class="jumbotron">
-    <h1>Schaufensters Elektromobilität</h1>
-    <p>
-        Diese Seite bietet eine Suchmaschine für die Projekte des
-        <a href="http://www.schaufenster-elektromobilitaet.org/programm/">Schaufensters Elektromobilität</a>.
-        Dursucht werden die Projektseiten, inklusive Projekttitel, Kurzbeschreibung, Zielen etc.
-    </p>
-    <p>&nbsp;</p>
-    <p>
-        <form action="<?php echo $this->url('search'); ?>" method="get" class="form-inline" role="form">
-            <div class="input-group">
-                <input type="text" name="q" class="form-control input-lg" id="searchTerm" placeholder="Suchbegriff">
-                <span class="input-group-btn">
-                    <button type="submit" class="btn btn-default input-lg">Suchen</button>
-                </span>
-            </div>
-        </form>
-    </p>
+    <div class="container">
+        <h1>Schaufenster Elektromobilität</h1>
+        <p>
+            Diese Seite bietet eine Suchmaschine für die Projekte des
+            <a href="http://www.schaufenster-elektromobilitaet.org/programm/">Schaufensters Elektromobilität</a>.
+            Dursucht werden die Projektseiten, inklusive Projekttitel, Kurzbeschreibung, Zielen etc.
+        </p>
+        <p>&nbsp;</p>
+        <p>
+            <form action="<?php echo $this->url('search'); ?>" method="get" class="form-inline" role="form">
+                <div class="input-group">
+                    <input type="text" name="q" class="form-control input-lg" id="searchTerm" placeholder="Suchbegriff">
+                    <span class="input-group-btn">
+                        <button type="submit" class="btn btn-default input-lg">Suchen</button>
+                    </span>
+                </div>
+            </form>
+        </p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <h2>Projekte</h2>
+            <p>
+                Neben der Suche existiert auch eine Übersicht über alle Projekte mit Kurzbeschreibungen.
+                Weitere Details können den verlinkten Projektseiten entnommen werden.
+            </p>
+            <p><a class="btn btn-default" href="<?php echo $this->url("projects"); ?>" role="button">Zur Projektübersicht &raquo;</a></p>
+        </div>
+        <div class="col-md-4 col-md-offset-4">
+            <h2>Quellcode</h2>
+            <p>
+                Diese einfache Suchmaschine basiert auf der Komponente Lucene aus dem
+                <a href="http://framework.zend.com/">Zend Framework</a>. Der Quellcode dieser Seite
+                ist Open Source.
+            </p>
+            <p><a class="btn btn-default" href="https://github.com/driehle/emobility-search-engine" role="button">Zu GitHub &raquo;</a></p>
+        </div>
+    </div>
 </div>

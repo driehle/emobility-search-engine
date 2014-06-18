@@ -3,7 +3,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <?php echo $this->headTitle('ZF2 '. $this->translate('Skeleton Application'))->setSeparator(' - ')->setAutoEscape(false) ?>
+        <?php echo $this->headTitle($this->translate('e-mobility search'))->setSeparator(' - ')->setAutoEscape(false) ?>
 
         <?php echo $this->headMeta()
             ->appendName('viewport', 'width=device-width, initial-scale=1.0')
@@ -39,20 +39,17 @@
                 </div>
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">
-                        <li class="active"><a href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Home') ?></a></li>
+                        <li<?php if ($this->currentRouteMatch('home')): ?> class="active"<?php endif; ?>><a href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Home') ?></a></li>
+                        <li<?php if ($this->currentRouteMatch('search')): ?> class="active"<?php endif; ?>><a href="<?php echo $this->url('search') ?>"><?php echo $this->translate('Suche') ?></a></li>
+                        <li<?php if ($this->currentRouteMatch('projects')): ?> class="active"<?php endif; ?>><a href="<?php echo $this->url('projects') ?>"><?php echo $this->translate('Projekte') ?></a></li>
                     </ul>
                 </div><!--/.nav-collapse -->
             </div>
         </nav>
-        <div class="container">
-            <?php echo $this->content; ?>
-            <hr>
-            <!--
-            <footer>
-                <p>&copy; 2005 - <?php echo date('Y') ?> by Zend Technologies Ltd. <?php echo $this->translate('All rights reserved.') ?></p>
-            </footer>
-            -->
-        </div> <!-- /container -->
+
+        <?php echo $this->content; ?>
         <?php echo $this->inlineScript() ?>
+
+        <a id="fork-github" href="https://github.com/driehle/emobility-search-engine"><img src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
     </body>
 </html>
