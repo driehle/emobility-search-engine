@@ -1,24 +1,18 @@
 <?php
-/**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/ZendSkeletonApplication for the canonical source repository
- * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
- */
 
 namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use ZendSearch\Lucene;
+use ZendSearch\Lucene\Lucene;
+use Exception;
 
 class ProjectController extends AbstractActionController
 {
     public function indexAction()
     {
         try {
-            $lucene = Lucene\Lucene::open("data/index/");
+            $lucene = Lucene::open("data/index/");
             $num = $lucene->numDocs();
             $hits = array();
             for ($i = 0; $i < $num; $i ++) {
@@ -28,7 +22,7 @@ class ProjectController extends AbstractActionController
             }
             usort($hits, array($this, '_sortCallback'));
         }
-        catch (\Exception $e) {
+        catch (Exception $e) {
             $hits = array();
         }
 

@@ -2,7 +2,6 @@
 
 namespace Application\SearchEngine\DocumentProvider;
 
-use Application\SearchEngine\DocumentProvider\DocumentProviderInterface;
 use Zend\Http\Client;
 use Zend\Http\Request;
 use Zend\Stdlib\ErrorHandler;
@@ -104,18 +103,25 @@ abstract class AbstractDocumentProvider implements DocumentProviderInterface
                 continue;
             }
 
-            $charset = null;
+            $charset = 'UTF-8';
             if ($response->getHeaders()->has('Content-Type')) {
                 $charset = $response->getHeaders()->get('Content-Type')->getCharset();
+                $charset = trim(strtoupper($charset));
+                if (empty($charset)) {
+                    $charset = 'UTF-8';
+                }
             }
-            if ($charset == null) {
-                $charset = 'UTF-8';
+
+            // add http-equiv meta tag if not present
+            $data = $response->getBody();
+            if (!preg_match('/<meta[^>]*Content-Type[^>]*charset=' . preg_quote($charset) . '[^>*]>/', $data)) {
+                $data = preg_replace('/(<head[^>]*>)/', '\\1<meta http-equiv="Content-Type" content="text/html; charset="' . $charset . '" />', $data);
             }
 
             $dom = new \DOMDocument();
             $dom->substituteEntities = true;
             ErrorHandler::start(E_WARNING);
-            $dom->loadHTML($response->getBody());
+            $dom->loadHTML($data);
             ErrorHandler::stop();
 
             $xpath = new \DOMXPath($dom);
@@ -123,14 +129,15 @@ abstract class AbstractDocumentProvider implements DocumentProviderInterface
             $bodyNodes = $xpath->query('/html/body');
             foreach ($bodyNodes as $bodyNode) {
                 // body should always have only one entry, but we process all nodeset entries
-                $this->_retrieveNodeText($bodyNode, $docBody);
+                $docBody .= $this->_retrieveNodeText($bodyNode, $charset);
             }
 
             $doc = new Document();
             $doc->addField(Field::unStored('body', $docBody));
-            $doc->addField(Field::unIndexed('url', $url));
+            $doc->addField(Field::keyword('url', $url));
+            $doc->addField(Field::unIndexed('timestamp', time()));
 
-            $this->_parseDocument($dom, $xpath, $doc);
+            $this->_parseDocument($dom, $xpath, $doc, $charset);
 
             if (!isset($doc->title)) {
                 $doc->addField(Field::text('title', 'Unknown title'));
@@ -140,6 +147,7 @@ abstract class AbstractDocumentProvider implements DocumentProviderInterface
             }
 
             $documents[] = $doc;
+            usleep(8000);
         }
 
         return $documents;
@@ -149,9 +157,32 @@ abstract class AbstractDocumentProvider implements DocumentProviderInterface
      * @param \DOMDocument $dom the DOM document
      * @param \DOMXPath $xpath the XPath object
      * @param Document $doc the Lucene document
+     * @param string $charset the charset of the document
      * @return void
      */
-    abstract public function _parseDocument(\DOMDocument $dom, \DOMXpath $xpath, Document $doc);
+    abstract public function _parseDocument(\DOMDocument $dom, \DOMXpath $xpath, Document $doc, $charset);
+
+    /**
+     * Get node text
+     *
+     * We should exclude scripts, which may be not included into comment tags, CDATA sections,
+     *
+     * @param \DOMNode $node
+     * @param string $charset
+     * @return string
+     * @see \ZendSearch\Lucene\Document\Html
+     */
+    protected function _retrieveNodeText(\DOMNode $node, $charset)
+    {
+        $text = '';
+        $this->_retrieveNodeTextHelper($node, $text);
+
+        // replace &nbsp;
+        $text = str_replace("\xc2\xa0", ' ', $text);
+        $text = trim($text);
+
+        return $text;
+    }
 
     /**
      * Get node text
@@ -162,7 +193,7 @@ abstract class AbstractDocumentProvider implements DocumentProviderInterface
      * @param string &$text
      * @see \ZendSearch\Lucene\Document\Html
      */
-    protected function _retrieveNodeText(\DOMNode $node, &$text)
+    protected function _retrieveNodeTextHelper(\DOMNode $node, &$text)
     {
         if ($node->nodeType == XML_TEXT_NODE) {
             $text .= $node->nodeValue;
@@ -171,7 +202,7 @@ abstract class AbstractDocumentProvider implements DocumentProviderInterface
             }
         } elseif ($node->nodeType == XML_ELEMENT_NODE  &&  $node->nodeName != 'script') {
             foreach ($node->childNodes as $childNode) {
-                $this->_retrieveNodeText($childNode, $text);
+                $this->_retrieveNodeTextHelper($childNode, $text);
             }
         }
     }

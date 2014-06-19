@@ -16,24 +16,23 @@ class MetropolregionProvider extends AbstractDocumentProvider
      * @param \DOMDocument $dom the DOM document
      * @param \DOMXPath $xpath the XPath object
      * @param Document $doc the Lucene document
+     * @param string $charset the charset of the document
      * @return void
      */
-    public function _parseDocument(\DOMDocument $dom, \DOMXPath $xpath, Document $doc)
+    public function _parseDocument(\DOMDocument $dom, \DOMXPath $xpath, Document $doc, $charset)
     {
         $doc->addField(Field::text('country', 'Niedersachsen'));
 
         $headers = $dom->getElementsByTagName("h2");
         foreach ($headers as $header) {
             /* @var \DOMNode $header */
-            $title = '';
-            $description = '';
             $next = $header->nextSibling;
             while ($next->nodeName != 'p') {
                 $next = $next->nextSibling;
             }
 
-            $this->_retrieveNodeText($header, $title);
-            $this->_retrieveNodeText($next, $description);
+            $title = $this->_retrieveNodeText($header, $charset);
+            $description = $this->_retrieveNodeText($next, $charset);
             $description = preg_replace('/\s+/', ' ', $description);
 
             $doc->addField(Field::text('title', $title));

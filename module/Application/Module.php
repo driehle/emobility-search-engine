@@ -11,8 +11,11 @@ namespace Application;
 
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
+use Zend\ModuleManager\Feature\ConsoleBannerProviderInterface;
+use Zend\ModuleManager\Feature\ConsoleUsageProviderInterface;
+use Zend\Console\Adapter\AdapterInterface as Console;
 
-class Module
+class Module implements ConsoleBannerProviderInterface
 {
     public function onBootstrap(MvcEvent $e)
     {
@@ -34,6 +37,25 @@ class Module
                     __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
                 ),
             ),
+        );
+    }
+
+    /**
+     * This method is defined in ConsoleBannerProviderInterface
+     */
+    public function getConsoleBanner(Console $console)
+    {
+        return 'e-mobility search engine';
+    }
+
+    /**
+     * This method is defined in ConsoleUsageProviderInterface
+     */
+    public function getConsoleUsage(Console $console)
+    {
+        return array(
+            'search-index build'     => '(Re-) build the search index',
+            'search-index update'    => 'Update the search index'
         );
     }
 }

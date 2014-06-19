@@ -65,7 +65,8 @@ return array(
         'invokables' => array(
             'Application\Controller\Index' => 'Application\Controller\IndexController',
             'Application\Controller\Search' => 'Application\Controller\SearchController',
-            'Application\Controller\Project' => 'Application\Controller\ProjectController'
+            'Application\Controller\Project' => 'Application\Controller\ProjectController',
+            'Application\Controller\SearchIndex' => 'Application\Controller\SearchIndexController',
         ),
     ),
     'view_manager' => array(
@@ -93,6 +94,24 @@ return array(
     'console' => array(
         'router' => array(
             'routes' => array(
+                'search-index-build' => array(
+                    'options' => array(
+                        'route'    => 'search-index build',
+                        'defaults' => array(
+                            'controller' => 'Application\Controller\SearchIndex',
+                            'action'     => 'build'
+                        )
+                    )
+                ),
+                'search-index-update' => array(
+                    'options' => array(
+                        'route'    => 'search-index update',
+                        'defaults' => array(
+                            'controller' => 'Application\Controller\SearchIndex',
+                            'action'     => 'update'
+                        )
+                    )
+                ),
             ),
         ),
     ),

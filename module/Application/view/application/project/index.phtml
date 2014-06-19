@@ -1,56 +1,74 @@
 <?php $this->headStyle()->appendStyle('
-.result {
-    margin: 2em 0;
-    height: 300px;
-    padding-right: 1em;
+#filter-controls {
+    margin-top: 50px;
 }
-.result p.location {
+#filter-controls label {
+    margin-right: 1em;
+}
+.project {
+    margin: 2em 0;
+    max-width: 700px;
+}
+.project p.location {
     margin: .3em 0;
     font-size: 9pt;
 }
-.result h2 {
+.project h2 {
     margin: 0;
     font-size: 18pt;
 }
-.result p.description {
+.project p.description {
     margin: .3em 0;
-    max-height: 150px;
-    overflow: auto;
     padding-right: .5em;
 }
-.result p.link {
+.project p.link {
     font-size: 9pt;
 }
-') ?>
+'); ?>
+<?php $this->inlineScript()->appendScript('
+$("#filter-controls input").each(function(key, el) {
+    $(el).click(function(e) {
+        if ($(this).is(":checked")) {
+            $(".project." + $(this).val()).show();
+        }
+        else {
+            $(".project." + $(this).val()).hide();
+        }
+        $("#project-counter").html($(".project:visible").length);
+    });
+});
+'); ?>
 
 <div class="container">
 
-    <p style="margin-top: 3em;">
-        <?php echo count($hits); ?> Projekte der Elektromobilität
+    <p id="filter-controls">
+        <label><input type="checkbox" value="badenwrttemberg" checked="checked" autocomplete="off"> Baden-Würrtemberg</label>
+        <label><input type="checkbox" value="bayernsachsen" checked="checked" autocomplete="off"> Bayern / Sachsen</label>
+        <label><input type="checkbox" value="berlin" checked="checked" autocomplete="off"> Berlin</label>
+        <label><input type="checkbox" value="niedersachsen" checked="checked" autocomplete="off"> Niedersachsen</label>
+    </p>
+    <p>
+        <span id="project-counter"><?php echo count($hits); ?></span> Projekte der Elektromobilität
     </p>
 
     <hr>
 
-    <div class="row">
     <?php foreach ($hits as $hit): ?>
-        <div class="col-md-5">
-            <div class="result">
-                <p class="location">
-                    <?php echo $this->escapeHtml($hit->country); ?>
-                </p>
-                <h2>
-                    <a href="<?php echo $this->escapeHtml($hit->url); ?>">
-                    <?php echo $this->escapeHtml($hit->title); ?></a>
-                </h2>
-                <p class="description">
-                    <?php echo $this->escapeHtml($hit->description); ?>
-                </p>
-                <p class="link">
-                    <a href="<?php echo $this->escapeHtml($hit->url); ?>">
-                        <?php echo $this->escapeHtml(parse_url($hit->url, PHP_URL_HOST)); ?></a>
-                </p>
-            </div>
+        <div class="project <?php echo preg_replace('/[^a-z]/', '', strtolower($hit->country)); ?>">
+            <p class="location">
+                <?php echo $this->escapeHtml($hit->country); ?>
+            </p>
+            <h2>
+                <a href="<?php echo $this->escapeHtml($hit->url); ?>">
+                <?php echo $this->escapeHtml($hit->title); ?></a>
+            </h2>
+            <p class="description">
+                <?php echo $this->escapeHtml($hit->description); ?>
+            </p>
+            <p class="link">
+                <a href="<?php echo $this->escapeHtml($hit->url); ?>">
+                    <?php echo $this->escapeHtml(parse_url($hit->url, PHP_URL_HOST)); ?></a>
+            </p>
         </div>
     <?php endforeach; ?>
-    </div>
 </div>
