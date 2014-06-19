@@ -36,12 +36,19 @@ div.container a.brand {
     padding: 8px 20px 12px 40px;
 }
 
-#fork-github {
-    position: fixed;
-    top: 0;
-    right: 0;
-    z-index: 500000;
+@media (max-width: 991px) {
+    #fork-github {
+        display: none;
+    }
 }
-#fork-github img {
-    border: 0;
+@media (min-width: 992px) {
+    #fork-github {
+        position: fixed;
+        top: 0;
+        right: 0;
+        z-index: 500000;
+    }
+    #fork-github img {
+        border: 0;
+    }
 }

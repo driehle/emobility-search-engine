@@ -33,6 +33,8 @@ class ProjectController extends AbstractActionController
 
     protected function _sortCallback($a, $b)
     {
-        return $a->title < $b->title ? -1 : ($a->title > $b->title ? 1 : 0);
+        $ta = strtolower($a->title);
+        $tb = strtolower($b->title);
+        return $ta < $tb ? -1 : ($ta > $tb ? 1 : 0);
     }
 }
