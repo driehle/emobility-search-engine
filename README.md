@@ -1,12 +1,14 @@
 emobility-search-engine
 =======================
 
-Within the program "Schaufenster Elektromobilit‰t", the German government set-up a set of over 100 projects to promote e-mobility. This tool provides a search engine to efficiently search within these projects. Currently the projects listed on these four websites are added to the search index:
+Within the program "Schaufenster Elektromobilit√§t", the German government set-up a set of over 100 projects to promote e-mobility. This tool provides a search engine to efficiently search within these projects. Currently the projects listed on these four websites are added to the search index:
 
  -   [www.elektromobilitaet-verbindet.de](http://www.elektromobilitaet-verbindet.de/)
  -   [www.emo-berlin.de](http://www.emo-berlin.de/)
  -   [www.livinglab-bwe.de](http://www.livinglab-bwe.de/)
  -   [www.metropolregion.de](http://www.metropolregion.de/)
+
+![Click here for a screenshot](https://raw.githubusercontent.com/driehle/emobility-search-engine/master/public/img/screenshot.png)
 
 
 Setup
