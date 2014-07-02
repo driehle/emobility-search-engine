@@ -16,6 +16,7 @@ class SearchController extends AbstractActionController
         $q = $this->params()->fromQuery("q");
 
         try {
+            LuceneQueryParser::setDefaultEncoding('UTF-8');
             $query = LuceneQueryParser::parse($q);
             $hits = $lucene->find($query);
         }
